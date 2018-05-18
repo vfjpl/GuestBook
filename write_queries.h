@@ -1,0 +1,6 @@
+#ifndef WRITE_QUERIES_H_INCLUDED
+#define WRITE_QUERIES_H_INCLUDED
+
+void on_send_main();
+
+#endif // WRITE_QUERIES_H_INCLUDED
