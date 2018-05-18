@@ -48,7 +48,7 @@ void on_refresh_words()
 {
     if( mysql_query(connection, ("SELECT word, COUNT(*) AS count "
     "FROM (SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(comment, ' ', numbers.n), ' ', -1) AS word "
-    "FROM (SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5) AS numbers "
+    "FROM (SELECT id AS n FROM comments) AS numbers "
     "INNER JOIN comments ON CHAR_LENGTH(comment) - CHAR_LENGTH(REPLACE(comment, ' ', '')) >= numbers.n-1) AS unused "
     "GROUP BY word ORDER BY count DESC")) )
     {
