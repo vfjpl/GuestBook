@@ -29,6 +29,7 @@ int main (int argc, char *argv[])
     buffer_main = gtk_builder_get_object(builder, "Buffer_main");
     search_main = gtk_builder_get_object(builder, "Search_main");
     buffer_words = gtk_builder_get_object(builder, "Buffer_words");
+    buffer_pivot = gtk_builder_get_object(builder, "Buffer_pivot");
 
 
     gtk_widget_show(window);

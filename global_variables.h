@@ -6,6 +6,8 @@
 
 GtkTextBuffer *buffer_main;
 GtkTextBuffer *buffer_words;
+GtkTextBuffer *buffer_pivot;
+
 GtkEntry *entry_main;
 GtkSearchEntry *search_main;
 MYSQL *connection;

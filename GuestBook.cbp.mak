@@ -16,7 +16,7 @@ CFLAGS = `pkg-config gtk+-3.0 --cflags` `mysql_config --cflags` -Wall
 RESINC = 
 LIBDIR = 
 LIB = 
-LDFLAGS = `pkg-config gtk+-3.0 --libs` `mysql_config --libs`
+LDFLAGS = `pkg-config gtk+-3.0 --libs` `mysql_config --libs` -rdynamic
 
 INC_DEBUG = $(INC)
 CFLAGS_DEBUG = $(CFLAGS) -g
