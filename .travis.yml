@@ -1,3 +1,7 @@
-language: cpp
+language: c
+
+addons:
+  apt:
+    packages: libgtk-3-dev
 
 script: make -f GuestBook.cbp.mak
