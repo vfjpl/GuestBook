@@ -8,7 +8,7 @@ int main (int argc, char *argv[])
     if(mysql_real_connect(connection, "localhost", "root", "", "guestbook", 0, NULL, 0) == NULL)//0
     {
         printf("%s\n", mysql_error(connection));
-        return EXIT_FAILURE;
+        return 1;
     }
 
     //gtk_init
@@ -19,7 +19,7 @@ int main (int argc, char *argv[])
     builder = gtk_builder_new();
     if(gtk_builder_add_from_file(builder, "GuestBook.glade", NULL) == 0)
     {
-        return EXIT_FAILURE;
+        return 1;
     }
     gtk_builder_connect_signals(builder, NULL);
 
@@ -31,10 +31,10 @@ int main (int argc, char *argv[])
     buffer_words = gtk_builder_get_object(builder, "Buffer_words");
 
 
-    gtk_widget_show(window);//fix
+    gtk_widget_show(window);
     gtk_main();
 
 
     mysql_close(connection);
-    return EXIT_SUCCESS;
+    return 0;
 }
