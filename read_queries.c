@@ -79,11 +79,8 @@ void on_refresh_words()
 
 void on_refresh_pivot()
 {
-    if( mysql_query(connection, ("SELECT word, COUNT(*) AS count "
-    "FROM (SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(comment, ' ', numbers.n), ' ', -1) AS word "
-    "FROM (SELECT id AS n FROM comments) AS numbers "
-    "INNER JOIN comments ON CHAR_LENGTH(comment) - CHAR_LENGTH(REPLACE(comment, ' ', '')) >= numbers.n-1) AS unused "
-    "GROUP BY word ORDER BY count DESC")) )
+    if( mysql_query(connection, ("SELECT date(timestamp) AS date, COUNT(*) AS count "
+    "FROM comments GROUP BY date ORDER BY id DESC")) )
     {
         printf("%s\n", mysql_error(connection));
         return;
@@ -93,15 +90,15 @@ void on_refresh_pivot()
 
     if( (row = mysql_fetch_row(query_result)) )
     {
-        gtk_text_buffer_set_text(buffer_pivot, row[1], -1);
-        gtk_text_buffer_insert_at_cursor(buffer_pivot, " ", -1);
-        gtk_text_buffer_insert_at_cursor(buffer_pivot, row[0], -1);
+        gtk_text_buffer_set_text(buffer_pivot, row[0], -1);
+        gtk_text_buffer_insert_at_cursor(buffer_pivot, " Liczba komentarzy: ", -1);
+        gtk_text_buffer_insert_at_cursor(buffer_pivot, row[1], -1);
         while( (row = mysql_fetch_row(query_result)) )
         {
             gtk_text_buffer_insert_at_cursor(buffer_pivot, "\n", -1);
-            gtk_text_buffer_insert_at_cursor(buffer_pivot, row[1], -1);
-            gtk_text_buffer_insert_at_cursor(buffer_pivot, " ", -1);
             gtk_text_buffer_insert_at_cursor(buffer_pivot, row[0], -1);
+            gtk_text_buffer_insert_at_cursor(buffer_pivot, " Liczba komentarzy: ", -1);
+            gtk_text_buffer_insert_at_cursor(buffer_pivot, row[1], -1);
         }
     }
     else
