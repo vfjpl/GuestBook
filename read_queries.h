@@ -6,4 +6,8 @@ void on_search_main();
 void on_refresh_main();
 void on_refresh_words();
 
+void on_refresh_dzien();
+void on_refresh_kwartal();
+void on_refresh_custom();
+
 #endif // READ_QUERIES_H_INCLUDED

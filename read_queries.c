@@ -77,10 +77,12 @@ void on_refresh_words()
     }
 }
 
-void on_refresh_pivot()
+/////////////////////////////////////////////////////////////////////////////////
+
+void on_refresh_dzien()
 {
-    if( mysql_query(connection, ("SELECT date(timestamp) AS date, COUNT(*) AS count "
-    "FROM comments GROUP BY date ORDER BY id DESC")) )
+    if( mysql_query(connection, "SELECT date(timestamp) AS date, COUNT(*) AS count "
+    "FROM comments GROUP BY date ORDER BY id DESC") )
     {
         printf("%s\n", mysql_error(connection));
         return;
@@ -98,6 +100,68 @@ void on_refresh_pivot()
             gtk_text_buffer_insert_at_cursor(buffer_pivot, "\n", -1);
             gtk_text_buffer_insert_at_cursor(buffer_pivot, row[0], -1);
             gtk_text_buffer_insert_at_cursor(buffer_pivot, " Liczba komentarzy: ", -1);
+            gtk_text_buffer_insert_at_cursor(buffer_pivot, row[1], -1);
+        }
+    }
+    else
+    {
+        gtk_text_buffer_set_text(buffer_pivot, "", 0);
+    }
+}
+
+void on_refresh_kwartal()
+{
+    if( mysql_query(connection, "SELECT quarter(timestamp) AS date, COUNT(*) AS count "
+    "FROM comments GROUP BY date ORDER BY id DESC") )
+    {
+        printf("%s\n", mysql_error(connection));
+        return;
+    }
+    MYSQL_RES *query_result = mysql_use_result(connection);//mysql_store_result
+    MYSQL_ROW row;
+
+    if( (row = mysql_fetch_row(query_result)) )
+    {
+        gtk_text_buffer_set_text(buffer_pivot, "Kwartał: ", -1);
+        gtk_text_buffer_insert_at_cursor(buffer_pivot, row[0], -1);
+        gtk_text_buffer_insert_at_cursor(buffer_pivot, " Liczba komentarzy: ", -1);
+        gtk_text_buffer_insert_at_cursor(buffer_pivot, row[1], -1);
+        while( (row = mysql_fetch_row(query_result)) )
+        {
+            gtk_text_buffer_insert_at_cursor(buffer_pivot, "\n Kwartał: ", -1);
+            gtk_text_buffer_insert_at_cursor(buffer_pivot, row[0], -1);
+            gtk_text_buffer_insert_at_cursor(buffer_pivot, " Liczba komentarzy: ", -1);
+            gtk_text_buffer_insert_at_cursor(buffer_pivot, row[1], -1);
+        }
+    }
+    else
+    {
+        gtk_text_buffer_set_text(buffer_pivot, "", 0);
+    }
+}
+
+void on_refresh_custom()
+{
+    if( mysql_query(connection, "SELECT SUM(if(SUBSTRING_INDEX(SUBSTRING_INDEX(comment, ' ', 1), ' ', -1) = 'xd', 1, NULL)), 'xd' "
+    "FROM comments ORDER BY id DESC") )
+    {
+        printf("%s\n", mysql_error(connection));
+        return;
+    }
+    MYSQL_RES *query_result = mysql_use_result(connection);//mysql_store_result
+    MYSQL_ROW row;
+
+    if( (row = mysql_fetch_row(query_result)) )
+    {
+        gtk_text_buffer_set_text(buffer_pivot, "Ilosc komentarzy: ", -1);
+        gtk_text_buffer_insert_at_cursor(buffer_pivot, row[0], -1);
+        gtk_text_buffer_insert_at_cursor(buffer_pivot, " z pierwszym słowem: ", -1);
+        gtk_text_buffer_insert_at_cursor(buffer_pivot, row[1], -1);
+        while( (row = mysql_fetch_row(query_result)) )
+        {
+            gtk_text_buffer_insert_at_cursor(buffer_pivot, "\n Ilosc komentarzy: ", -1);
+            gtk_text_buffer_insert_at_cursor(buffer_pivot, row[0], -1);
+            gtk_text_buffer_insert_at_cursor(buffer_pivot, " z pierwszym słowem: ", -1);
             gtk_text_buffer_insert_at_cursor(buffer_pivot, row[1], -1);
         }
     }
